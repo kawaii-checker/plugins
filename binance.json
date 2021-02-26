@@ -10,10 +10,6 @@
     "name": "logined",
     "to": "logined"
   }, {
-    "action": "print",
-    "text": "{{logined}}"
-  },
-  {
     "action": "str_compare",
     "str1": "{{logined}}",
     "str2": "y",
