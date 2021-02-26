@@ -38,7 +38,7 @@
       "on_true": [{
         "action": "variable_set",
         "name": "followers",
-        "value": "?"
+        "value": "x"
       }],
       "on_false": null
     }, {
