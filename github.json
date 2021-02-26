@@ -1,0 +1,31 @@
+{
+  "name": "GitHub",
+  "author": "MaxUNof",
+  "folder_name": "GitHub",
+  "subfolder_name": "GitHub @{{username}}",
+  "info_text": "Cookies: {{CookiesPath}}\n\nUsername: {{username}}\nURL: https://github.com/{{username}}",
+  "tasks": [{
+    "action": "http_request",
+    "type": "GET",
+    "url": "https://github.com",
+    "to": "github"
+  }, {
+    "action": "re_find",
+    "str": "{{github}}",
+    "regex": "(?U)<meta name=\"user-login\" content=\"(.*)\">",
+    "group_index": 1,
+    "to": "username"
+  }, {
+    "action": "str_compare",
+    "str1": "{{username}}",
+    "str2": "",
+    "on_true": null,
+    "on_false": [{
+      "action": "print",
+      "text": "Username: {{username}}"
+    }, {
+      "action": "return",
+      "result": true
+    }]
+  }]
+}
