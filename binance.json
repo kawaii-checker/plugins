@@ -1,0 +1,29 @@
+{
+  "name": "Binance",
+  "author": "MaxUNof",
+  "folder_name": "Binance (not exactly)",
+  "subfolder_name": "Binance",
+  "info_text": "Cookies: {{CookiesPath}}",
+  "tasks": [{
+    "action": "cookie_get",
+    "url": "https://www.binance.com",
+    "name": "logined",
+    "to": "logined"
+  }, {
+    "action": "print",
+    "text": "{{logined}}"
+  },
+  {
+    "action": "str_compare",
+    "str1": "{{logined}}",
+    "str2": "y",
+    "on_true": [{
+      "action": "print",
+      "text": "Probably logined"
+    }, {
+      "action": "return",
+      "result": true
+    }],
+    "on_false": null
+  }]
+}
