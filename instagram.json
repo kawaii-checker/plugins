@@ -32,6 +32,16 @@
       "group_index": 1,
       "to": "followers"
     }, {
+      "action": "str_compare",
+      "str1": "{{followers}}",
+      "str2": "",
+      "on_true": [{
+        "action": "variable_set",
+        "name": "followers",
+        "value": "?"
+      }],
+      "on_false": null
+    }, {
       "action": "print",
       "text": "Username: {{username}} | Followers: {{followers}}"
     },{
