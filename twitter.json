@@ -1,0 +1,37 @@
+{
+  "name": "Twitter",
+  "author": "MaxUNof",
+  "folder_name": "Twitter",
+  "subfolder_name": "Twitter ({{followers}} subs)",
+  "info_text": "Cookies: {{CookiesPath}}\n\nID: {{id}}\nURL: https://twitter.com/i/user/{{id}}\nFollowers: {{followers}}",
+  "tasks": [{
+    "action": "http_request",
+    "type": "GET",
+    "url": "https://twitter.com",
+    "to": "twitter"
+  }, {
+    "action": "re_find",
+    "str": "{{twitter}}",
+    "regex": "(?U)\"id_str\":\"(\\d+)\",",
+    "group_index": 1,
+    "to": "id"
+  }, {
+    "action": "str_compare",
+    "str1": "{{id}}",
+    "str2": "",
+    "on_true": null,
+    "on_false": [{
+      "action": "re_find",
+      "str": "{{twitter}}",
+      "regex": "(?U)\"followers_count\":(\\d+),",
+      "group_index": 1,
+      "to": "followers"
+    }, {
+        "action": "print",
+        "text": "ID: {{id}} | Followers: {{followers}}"
+    }, {
+      "action": "return",
+      "result": true
+    }]
+  }]
+}
