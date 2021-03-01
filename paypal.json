@@ -1,0 +1,31 @@
+{
+  "name": "PayPal",
+  "author": "MaxUNof",
+  "folder_name": "PayPal",
+  "subfolder_name": "PayPal ({{balance}})",
+  "info_text": "Cookies: {{CookiesPath}}\n\nBalance: {{balance}}",
+  "tasks": [{
+    "action": "http_request",
+    "type": "GET",
+    "url": "https://www.paypal.com/myaccount/money/",
+    "to": "paypal"
+  }, {
+    "action": "re_find",
+    "str": "{{paypal}}",
+    "regex": "(?U)balanceDetails-amount\">(.*)</p>",
+    "group_index": 1,
+    "to": "balance"
+  }, {
+    "action": "str_compare",
+    "str1": "{{balance}}",
+    "str2": "",
+    "on_true": null,
+    "on_false": [{
+      "action": "print",
+      "text": "Balance: {{balance}}"
+    }, {
+      "action": "return",
+      "result": true
+    }]
+  }]
+}
